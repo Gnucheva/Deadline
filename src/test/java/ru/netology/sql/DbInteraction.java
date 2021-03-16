@@ -42,7 +42,7 @@ public class DbInteraction {
         try (val conn = DriverManager.getConnection(url, user, password);
              val countStmt = conn.createStatement();) {
             if (user != null) {
-                String sql = "SELECT code FROM auth_codes WHERE created ";
+                String sql = "SELECT code FROM auth_codes ";
                 val resultSet = countStmt.executeQuery(sql);
                 if (resultSet.next()) {
                     //in this case enter when at least one result comes it means user is valid
