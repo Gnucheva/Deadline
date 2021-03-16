@@ -41,7 +41,7 @@ public class DbInteraction {
         val verificationCode = "SELECT code FROM auth_codes ";
         try (val conn = DriverManager.getConnection(url, user, password);
              val countStmt = conn.createStatement();) {
-            if (user != null) {
+            if (verificationCode != null) {
                 String sql = "SELECT code FROM auth_codes ";
                 val resultSet = countStmt.executeQuery(sql);
                 if (resultSet.next()) {
