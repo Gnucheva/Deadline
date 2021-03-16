@@ -2,30 +2,36 @@ package ru.netology.test;
 
 import com.codeborne.selenide.Selenide;
 import lombok.val;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.netology.data.DataHelper;
-import ru.netology.page.DashboardPage;
 import ru.netology.page.LoginPage;
 import ru.netology.sql.DbInteraction;
+
+import java.sql.SQLException;
 
 import static com.codeborne.selenide.Selenide.open;
 
 public class AuthorizationTest {
 
-    private DashboardPage shouldOpenDashboardPage() {
+    @BeforeEach
+    void setup() {
         open("http://localhost:9999");
         Selenide.clearBrowserCookies();
         Selenide.clearBrowserLocalStorage();
-        val loginPage = new LoginPage();
-        val authInfo = DataHelper.getAuthInfo();
-        val verificationPage = loginPage.validLogin(authInfo);
-        val verificationCode = DataHelper.getVerificationCodeFor(authInfo);
-        return verificationPage.validVerify(verificationCode);
     }
+
+    @AfterAll
+    static void cleanDatabase() {
+        DbInteraction.clean();
+    }
+
     @Test
-    void shouldLogIn(){
+    void shouldLogIn() throws SQLException {
         val loginPage = new LoginPage();
         val authInfo = DataHelper.getAuthInfo();
         val verificationPage = loginPage.validLogin(authInfo);
+        verificationPage.validVerify(DbInteraction.getCode());
     }
 }

@@ -20,16 +20,6 @@ public class DataHelper {
 
     public static AuthInfo getAuthInfoWithInvalid() {
         Faker faker = new Faker();
-        return new AuthInfo("vasya", faker.internet().password());
-    }
-
-    public static VerificationCode getVerificationCodeFor(AuthInfo authInfo) {
-        return new VerificationCode("12345");
-    }
-
-    @Value
-    public static class VerificationCode {
-        private String code;
+        return new AuthInfo("vasya", "123456");
     }
 }
-
