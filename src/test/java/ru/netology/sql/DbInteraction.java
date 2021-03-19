@@ -34,25 +34,14 @@ public class DbInteraction {
         }
     }
 
-    public static String getCode() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/app";
-        String user = "app";
-        String password = "pass";
-        val verificationCode = "SELECT code FROM auth_codes ";
-        try (val conn = DriverManager.getConnection(url, user, password);
-             val countStmt = conn.createStatement();) {
-            if (verificationCode != null) {
-                String sql = "SELECT code FROM auth_codes ";
-                val resultSet = countStmt.executeQuery(sql);
-                if (resultSet.next()) {
-                    //in this case enter when at least one result comes it means user is valid
-                } else {
-                    //in this case enter when  result size is zero  it means user is invalid
-                }
+    public static String getCode() {
+        try (val conn = getConnection();
+             val countStmt = conn.createStatement()) {
+            val sql = "SELECT code FROM auth_codes ORDER BY created DESC LIMIT 1";
+            val resultSet = countStmt.executeQuery(sql);
+            if (resultSet.next()) {
+                return resultSet.getString("code");
             }
-
-            // You can also validate user by result size if its comes zero user is invalid else user is valid
-
         } catch (SQLException err) {
             err.printStackTrace();
         }

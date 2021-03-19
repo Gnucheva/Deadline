@@ -1,8 +1,12 @@
 package ru.netology.page;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.Keys;
 import ru.netology.data.DataHelper;
 
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class LoginPage {
@@ -17,4 +21,27 @@ public class LoginPage {
         loginButton.click();
         return new VerificationPage();
     }
+
+    public void getInvalidLoginOrPassword() {
+        errorMessage.shouldBe(Condition.visible).shouldHave(text(" Ошибка Ошибка! Неверно указан логин или пароль"));
+
+    }
+
+    public void getBlockedMessage() {
+        errorMessage.shouldBe(visible).shouldHave(text("Система заблокирована"));
+    }
+
+    public void cleaning() {
+        loginField.doubleClick().sendKeys(Keys.BACK_SPACE);
+        passwordField.doubleClick().sendKeys(Keys.BACK_SPACE);
+
+    }
+
+    public void login(DataHelper.AuthInfo loginInfo) {
+        loginField.setValue(loginInfo.getLogin());
+        passwordField.setValue(loginInfo.getPassword());
+        loginButton.click();
+
+    }
+
 }

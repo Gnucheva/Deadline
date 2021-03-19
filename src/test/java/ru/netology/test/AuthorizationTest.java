@@ -9,8 +9,6 @@ import ru.netology.data.DataHelper;
 import ru.netology.page.LoginPage;
 import ru.netology.sql.DbInteraction;
 
-import java.sql.SQLException;
-
 import static com.codeborne.selenide.Selenide.open;
 
 public class AuthorizationTest {
@@ -28,10 +26,24 @@ public class AuthorizationTest {
     }
 
     @Test
-    void shouldLogIn() throws SQLException {
+    void shouldLogIn() {
         val loginPage = new LoginPage();
         val authInfo = DataHelper.getAuthInfo();
         val verificationPage = loginPage.validLogin(authInfo);
         verificationPage.validVerify(DbInteraction.getCode());
+    }
+
+    @Test
+    void shouldGetBlockMessage() {
+        val loginPage = new LoginPage();
+        val authInfo = DataHelper.getAuthInfoWithInvalid();
+        loginPage.login(authInfo);
+        loginPage.getInvalidLoginOrPassword();
+        loginPage.cleaning();
+        loginPage.login(authInfo);
+        loginPage.getInvalidLoginOrPassword();
+        loginPage.cleaning();
+        loginPage.login(authInfo);
+        loginPage.getBlockedMessage();
     }
 }
